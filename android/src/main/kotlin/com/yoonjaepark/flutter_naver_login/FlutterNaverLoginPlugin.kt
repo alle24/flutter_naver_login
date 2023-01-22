@@ -204,27 +204,28 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   private fun login(result: Result) {
     pendingResult = result
 
-//    val mOAuthLoginHandler = object : OAuthLoginCallback {
-//      override fun onSuccess() {
-//        currentAccount(result)
-//      }
-//      override fun onFailure(httpStatus: Int, message: String) {
-//        val errorCode = NaverIdLoginSDK.getLastErrorCode().code
-//        val errorDesc = NaverIdLoginSDK.getLastErrorDescription()
-//        result.success(object : HashMap<String, String>() {
-//          init {
-//            put("status", "error")
-//            put("errorMessage", "errorCode:$errorCode, errorDesc:$errorDesc")
-//          }
-//        })
-//      }
-//      override fun onError(errorCode: Int, message: String) {
-//        onFailure(errorCode, message)
-//      }
-//    }
+    val mOAuthLoginHandler = object : OAuthLoginCallback {
+      override fun onSuccess() {
+        currentAccount(result)
+      }
+      override fun onFailure(httpStatus: Int, message: String) {
+        val errorCode = NaverIdLoginSDK.getLastErrorCode().code
+        val errorDesc = NaverIdLoginSDK.getLastErrorDescription()
+        result.success(object : HashMap<String, String>() {
+          init {
+            put("status", "error")
+            put("errorMessage", "errorCode:$errorCode, errorDesc:$errorDesc")
+          }
+        })
+      }
+      override fun onError(errorCode: Int, message: String) {
+        onFailure(errorCode, message)
+      }
+    }
 
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
-    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
+//    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
+    NaverIdLoginSDK.authenticate(this.activity!!, OAuthLoginCallback);
   }
 
   fun logout(result: Result) {
