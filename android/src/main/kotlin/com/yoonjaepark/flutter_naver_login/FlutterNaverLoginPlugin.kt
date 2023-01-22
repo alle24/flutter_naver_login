@@ -225,7 +225,7 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
-    NaverIdLoginSDK.authenticate(this.activity!!, OAuthLoginCallback);
+    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
   }
 
   fun logout(result: Result) {
