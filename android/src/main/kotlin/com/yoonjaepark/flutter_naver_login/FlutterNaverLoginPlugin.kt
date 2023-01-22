@@ -206,11 +206,14 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
     val mOAuthLoginHandler = object : OAuthLoginCallback {
       override fun onSuccess() {
+        showToast("mOAuthLoginHandler onSuccess " + result.toString())
         currentAccount(result)
       }
       override fun onFailure(httpStatus: Int, message: String) {
         val errorCode = NaverIdLoginSDK.getLastErrorCode().code
         val errorDesc = NaverIdLoginSDK.getLastErrorDescription()
+
+        showToast("mOAuthLoginHandler onFailure " + errorCode + " / " + errorDesc + " / " + httpStatus + " / " + message)
         result.success(object : HashMap<String, String>() {
           init {
             put("status", "error")
@@ -219,6 +222,7 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
         })
       }
       override fun onError(errorCode: Int, message: String) {
+        showToast("mOAuthLoginHandler onError " + errorCode + " / " + message)
         onFailure(errorCode, message)
       }
     }
