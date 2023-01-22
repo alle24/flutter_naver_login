@@ -30,7 +30,9 @@ import java.net.HttpURLConnection
 import java.net.URL
 import java.util.concurrent.ExecutionException
 import android.util.Log
+import android.widget.Toast
 import com.navercorp.nid.NaverIdLoginSDK
+import com.navercorp.nid.NaverIdLoginSDK.applicationContext
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
@@ -63,6 +65,11 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   // used to call flutter result in launcher
   private var pendingResult: MethodChannel.Result? = null
 
+  fun showToast(msg: String) {
+    val toast = Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT);
+    toast.show();
+  }
+
   override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
     channel = MethodChannel(flutterPluginBinding.binaryMessenger, "flutter_naver_login")
     channel?.setMethodCallHandler(this);
@@ -79,7 +86,9 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
           OAUTH_CLIENT_SECRET = bundle?.getString("com.naver.sdk.clientSecret").toString();
           OAUTH_CLIENT_NAME = bundle?.getString("com.naver.sdk.clientName").toString();
 
-          NaverIdLoginSDK.initialize(flutterPluginBinding.applicationContext, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME);
+          NaverIdLoginSDK.initialize(flutterPluginBinding.applicationContext, OAUTH_CLIENT_ID, OAUTH_CLIENT_SECRET, OAUTH_CLIENT_NAME)
+
+          showToast("init NavetLogin " + OAUTH_CLIENT_ID + " / " + OAUTH_CLIENT_SECRET + " / " + OAUTH_CLIENT_NAME)
         }
       }
     } catch (e: Exception) {
@@ -147,6 +156,7 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
   }
 
   override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+    NaverIdLoginSDK.showDevelopersLog(true);
     when (call.method) {
       METHOD_LOG_IN -> this.login(result)
       METHOD_LOG_OUT -> this.logout(result)
@@ -174,15 +184,19 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     val task = ProfileTask()
     try {
       val res = task.execute(accessToken).get()
+      showToast("currentAccount res " + res.toString())
       val obj = JSONObject(res)
       var resultProfile = jsonObjectToMap(obj.getJSONObject("response"))
       resultProfile["status"] = "loggedIn"
       result.success(resultProfile)
     } catch (e: InterruptedException) {
+      showToast("currentAccount InterruptedException " + e.localizedMessage)
       e.printStackTrace()
     } catch (e: ExecutionException) {
+      showToast("currentAccount ExecutionException " + e.localizedMessage)
       e.printStackTrace()
     } catch (e: JSONException) {
+      showToast("currentAccount JSONException " + e.localizedMessage)
       e.printStackTrace()
     }
   }
