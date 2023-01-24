@@ -124,11 +124,14 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       result: ActivityResult ->
 
       if(pendingResult != null) {
+        showToast("pendingResult != null");
         if (result.resultCode == Activity.RESULT_OK) {
+          showToast("pendingResult Activity.RESULT_OK");
           currentAccount(pendingResult!!)
         } else if (result.resultCode == Activity.RESULT_CANCELED) {
             val errorCode = NaverIdLoginSDK.getLastErrorCode().code
             val errorDesc = NaverIdLoginSDK.getLastErrorDescription()
+          showToast("pendingResult Activity.RESULT_CANCELED / " + errorCode + " / " +errorDesc );
             pendingResult!!.success(object : HashMap<String, String>() {
               init {
                 put("status", "error")
@@ -136,6 +139,7 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
               }
             })
         } else {
+          showToast("pendingResult else" );
           pendingResult!!.success(null)
         }
       }
@@ -228,8 +232,8 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     }
 
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
-//    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
-    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
+    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
+//    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
   }
 
   fun logout(result: Result) {
