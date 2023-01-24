@@ -33,6 +33,7 @@ import android.util.Log
 import android.widget.Toast
 import com.navercorp.nid.NaverIdLoginSDK
 import com.navercorp.nid.NaverIdLoginSDK.applicationContext
+import com.navercorp.nid.oauth.NidOAuthBehavior
 import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.oauth.OAuthLoginCallback
 
@@ -231,9 +232,20 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
       }
     }
 
+    showToast("NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
+    NaverIdLoginSDK.behavior = NidOAuthBehavior.CUSTOMTABS
+    try {
+      if (applicationContext.packageManager.getApplicationInfo("com.nhn.android.search", 0).enabled) {
+        NaverIdLoginSDK.behavior = NidOAuthBehavior.NAVERAPP;
+        showToast("new NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
+      }
+    } catch (e: Exception) {
+    }
+
+
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
-    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
-//    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
+//    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
+    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
   }
 
   fun logout(result: Result) {
