@@ -236,7 +236,7 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
     NaverIdLoginSDK.behavior = NidOAuthBehavior.DEFAULT
     try {
       if (applicationContext.packageManager.getApplicationInfo("com.nhn.android.search", 0).enabled) {
-        NaverIdLoginSDK.behavior = NidOAuthBehavior.CUSTOMTABS
+        NaverIdLoginSDK.behavior = NidOAuthBehavior.WEBVIEW
         showToast("new NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
       }
     } catch (e: Exception) {
