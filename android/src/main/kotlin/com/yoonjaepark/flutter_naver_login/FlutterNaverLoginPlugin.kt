@@ -234,18 +234,18 @@ class FlutterNaverLoginPlugin: FlutterPlugin, MethodCallHandler, ActivityAware {
 
     showToast("NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
     NaverIdLoginSDK.behavior = NidOAuthBehavior.DEFAULT
-    try {
-      if (applicationContext.packageManager.getApplicationInfo("com.nhn.android.search", 0).enabled) {
-        NaverIdLoginSDK.behavior = NidOAuthBehavior.WEBVIEW
-        showToast("new NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
-      }
-    } catch (e: Exception) {
-    }
+//    try {
+//      if (applicationContext.packageManager.getApplicationInfo("com.nhn.android.search", 0).enabled) {
+//        NaverIdLoginSDK.behavior = NidOAuthBehavior.WEBVIEW
+//        showToast("new NaverIdLoginSDK behavior " + NaverIdLoginSDK.behavior)
+//      }
+//    } catch (e: Exception) {
+//    }
 
 
-    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
+//    NaverIdLoginSDK.authenticate(this.activity!!, launcher, mOAuthLoginHandler);
 //    NaverIdLoginSDK.authenticate(this.activity!!, launcher);
-//    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
+    NaverIdLoginSDK.authenticate(this.activity!!, mOAuthLoginHandler);
   }
 
   fun logout(result: Result) {
